@@ -14,12 +14,12 @@ class OpenNet:
 
     def mftpSend(self, data, info):
         print(info, data)
-        self.sock.send(inf)
+        self.sock.send(data.encode("utf-8"))
         print("done")
 
     def mftpRecv(self, info):
         recv = self.sock.recv(1024)
-        print(info, recv)
+        print(info, recv.decode("utf-8"))
         print("done")
 
 
@@ -33,7 +33,7 @@ class Package:
         self.SEPT = SEPT   #random 8 byte in hex
 
     def INF7(self):
-        self.INF7 = "INF V=%s I=%s A=%s C=%s R=%s 7=%s" % (self.V, self.I, self.A, self.C, self.E, self.SEPT)
+        self.INF7 = "INF V=%s I=%s A=%s C=%s R=%s 7=%s" % (self.V, self.I, self.A, self.C, self.R, self.SEPT)
         return self.INF7
 
     def PUT(self, data):
@@ -66,7 +66,7 @@ if __name__ == '__main__':
                 " L=255 P=255 F=fil.txt L=255 P=255 F=fil.txt L=255 P=255 F=fil.txt "
                 "L=255 P=255 ")
 
-    on = OpenNet('0.0.0.0', 23)
+    on = OpenNet('192.168.10.1', 5001)
     on.mftpSend(INF7, "Sended INF7 package:")
     on.mftpRecv("Recived INF8 package:")
     on.mftpSend(PUT, "Sended PUT package:")
