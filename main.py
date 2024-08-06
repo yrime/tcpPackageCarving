@@ -7,6 +7,7 @@ class OpenNet:
     def __init__(self, host, port):
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.sock.connect((host, port))
+        print("connected to:", host, port)
 
     def close(self):
         self.sock.shutdown(socket.SHUT_RDWR)
@@ -39,6 +40,23 @@ class Package:
     def PUT(self, data):
         return "PUT %s" % data
 
+#def fuckingNet(inf, put
+
+def fuckingFuzz(portList, INF7, PUT):
+    for p in portList:
+        on = OpenNet('192.168.10.1', p)
+        on.mftpSend(INF7, "Sended INF7 package:")
+        on.mftpRecv("Recived INF8 package:")
+        on.mftpSend(PUT, "Sended PUT package:")
+        on.mftpRecv("Recived PUT package:")
+        payload = 'A' * 1000
+        iter = 0
+        for ii in range(0, len(payload), 1000):
+            iter +=1
+            on.mftpSend(payload[ii:ii+1000], " Sended payload data:" )
+
+        on.close()    
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -64,8 +82,11 @@ if __name__ == '__main__':
                 " L=255 P=255 F=fil.txt L=255 P=255 F=fil.txt L=255 P=255 F=fil.txt"
                 " L=255 P=255 F=fil.txt L=255 P=255 F=fil.txt L=255 P=255 F=fil.txt"
                 " L=255 P=255 F=fil.txt L=255 P=255 F=fil.txt L=255 P=255 F=fil.txt "
-                "L=255 P=255 ")
+                "L=255 P=25")
 
+fuckingFuzz([5000, 5001, 5002, 5100], INF7, PUT)
+
+'''
     on = OpenNet('192.168.10.1', 5001)
     on.mftpSend(INF7, "Sended INF7 package:")
     on.mftpRecv("Recived INF8 package:")
@@ -78,3 +99,4 @@ if __name__ == '__main__':
         on.mftpSend(payload[ii:ii+1000], " Sended payload data:" )
 
     on.close()
+'''
